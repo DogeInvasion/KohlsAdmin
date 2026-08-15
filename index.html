@@ -5,6 +5,11 @@
 <title>Kohl's Admin Simulator</title>
 
 <style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
 *{
     margin:0;
     padding:0;
@@ -12,18 +17,26 @@
     font-family:Arial, Helvetica, sans-serif;
 }
 
-html,body{
+html,
+body{
     width:100%;
     height:100%;
 }
 
 body{
     overflow:hidden;
+
     background:
-        linear-gradient(rgba(110,160,190,.15),rgba(0,0,0,.12)),
-        url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920")
-        center center/cover;
+        linear-gradient(
+            rgba(100,150,180,.08),
+            rgba(0,0,0,.12)
+        ),
+        url("https://i.redd.it/i0atxt66h7941.jpg")
+        center center / cover no-repeat;
+
+    color:white;
 }
+
 
 /* =========================================================
    TOPBAR
@@ -31,25 +44,25 @@ body{
 
 #topbar{
     position:fixed;
+
     top:0;
     left:0;
+
     width:100%;
     height:36px;
 
-    background:rgba(35,35,35,.82);
+    background:rgba(35,35,35,.74);
 
     display:flex;
     align-items:center;
 
-    color:white;
-
-    z-index:1000;
+    z-index:5000;
 
     box-shadow:
-        0 1px 3px rgba(0,0,0,.45);
+        0 1px 3px rgba(0,0,0,.55);
 }
 
-.icon{
+.topIcon{
     width:38px;
     height:36px;
 
@@ -57,346 +70,609 @@ body{
     align-items:center;
     justify-content:center;
 
-    font-size:18px;
+    border-right:
+        1px solid rgba(255,255,255,.07);
+
+    color:white;
 
     cursor:pointer;
 
     user-select:none;
+}
 
-    border-right:1px solid rgba(255,255,255,.08);
+.topIcon:hover{
+    background:rgba(255,255,255,.07);
+}
+
+.topIcon img{
+    width:22px;
+    height:22px;
+
+    object-fit:contain;
+
+    display:block;
+
+    pointer-events:none;
+}
+
+#robloxLogo{
+    width:52px;
+}
+
+
+/* =========================================================
+   LEADERBOARD
+========================================================= */
+
+#leaderboard{
+    position:fixed;
+
+    top:42px;
+    right:7px;
+
+    width:205px;
+
+    z-index:4900;
+
+    color:white;
+
+    font-size:13px;
 
     text-shadow:
-        1px 1px 2px black;
+        1px 1px 2px rgba(0,0,0,.8);
 }
 
-.icon:hover{
-    background:rgba(255,255,255,.08);
+.leaderHeader{
+    height:29px;
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 55px;
+
+    align-items:center;
+
+    padding:0 8px;
+
+    background:
+        rgba(45,45,45,.68);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.12);
+
+    font-weight:bold;
 }
+
+.leaderPlayer{
+    min-height:29px;
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 55px;
+
+    align-items:center;
+
+    padding:0 8px;
+
+    background:
+        rgba(55,55,55,.54);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.07);
+}
+
+.playerName{
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    text-overflow:ellipsis;
+}
+
+.playerRank{
+    text-align:right;
+
+    color:#ddd;
+}
+
 
 /* =========================================================
    CHAT
+   TOP LEFT, BELOW TOPBAR
 ========================================================= */
 
-#chat{
-    position:absolute;
+#chatPanel{
+    position:fixed;
 
+    left:8px;
     top:45px;
-    left:10px;
 
     width:430px;
+    height:205px;
+
+    background:
+        rgba(45,45,45,.48);
+
+    z-index:4500;
+
+    overflow:hidden;
+}
+
+
+/* =========================================================
+   CHAT MESSAGES
+========================================================= */
+
+#chatMessages{
+    position:absolute;
+
+    top:7px;
+    left:8px;
+    right:8px;
+
+    bottom:36px;
+
+    overflow:hidden;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:flex-start;
 
     pointer-events:none;
-
-    z-index:300;
 }
 
 .chatMessage{
     width:max-content;
-    max-width:420px;
+    max-width:100%;
 
-    color:#fff;
+    color:white;
 
-    font-size:16px;
-    line-height:20px;
+    font-size:14px;
+
+    line-height:19px;
 
     margin-bottom:2px;
 
+    padding:
+        1px 5px;
+
+    background:
+        rgba(65,65,65,.58);
+
     text-shadow:
-        1px 1px 2px rgba(0,0,0,.95),
-        0 0 2px rgba(0,0,0,.7);
+        1px 1px 2px #000,
+        0 0 2px #000;
 
     opacity:0;
 
-    transform:translateY(6px);
+    transform:
+        translateY(6px);
 
-    animation:chatAppear .22s forwards;
-}
-
-.chatMessage.system{
-    color:#ddd;
-}
-
-.chatMessage .name{
-    font-weight:bold;
-    color:#fff;
-}
-
-.chatMessage .kohl{
-    color:#ff7777;
-    font-weight:bold;
+    animation:
+        chatAppear .2s forwards;
 }
 
 @keyframes chatAppear{
+
     to{
         opacity:1;
-        transform:translateY(0);
+
+        transform:
+            translateY(0);
     }
+
 }
 
-.chatMessage.fade{
-    animation:
-        chatAppear .22s forwards,
-        chatFade .5s 19s forwards;
+.playerChatName{
+    font-weight:bold;
 }
 
-@keyframes chatFade{
-    to{
-        opacity:0;
-    }
-}
 
 /* =========================================================
    CHAT INPUT
+   ALWAYS VISIBLE
 ========================================================= */
 
 #chatInput{
     position:absolute;
 
-    left:10px;
-    bottom:14px;
+    left:0;
+    bottom:0;
 
-    width:500px;
-    height:30px;
+    width:100%;
+    height:36px;
 
-    padding:5px 8px;
+    padding:
+        7px 9px;
 
-    border:1px solid rgba(0,0,0,.7);
+    border:0;
+
+    border-top:
+        1px solid rgba(255,255,255,.09);
 
     outline:none;
 
-    display:none;
-
-    color:#222;
-
-    font-size:14px;
-
-    background:rgba(245,245,245,.94);
-
-    box-shadow:
-        0 1px 4px rgba(0,0,0,.5);
-
-    z-index:900;
-}
-
-#chatInput::placeholder{
-    color:#777;
-}
-
-/* =========================================================
-   PLAYER LIST
-========================================================= */
-
-#players{
-    position:absolute;
-
-    top:40px;
-    right:10px;
-
-    width:180px;
-
-    background:rgba(20,20,20,.43);
+    background:
+        rgba(55,55,55,.63);
 
     color:white;
 
-    padding:7px 9px;
-
     font-size:13px;
 
-    text-shadow:
-        1px 1px 2px black;
-
-    z-index:200;
+    display:block;
 }
 
-.player{
-    padding:2px 0;
+#chatInput::placeholder{
+    color:#c7c7c7;
 }
+
 
 /* =========================================================
-   WELCOME
+   FULL SCREEN :M
 ========================================================= */
 
-#welcome{
+#mContainer{
+    position:fixed;
+
+    top:36px;
+    left:0;
+    right:0;
+    bottom:0;
+
+    pointer-events:none;
+
+    z-index:3000;
+}
+
+.mMessage{
     position:absolute;
 
     inset:0;
 
     display:flex;
 
+    align-items:center;
     justify-content:center;
-    align-items:center;
 
-    flex-direction:column;
+    padding:40px;
+
+    background:
+        rgba(65,65,65,.54);
 
     color:white;
+
+    font-size:25px;
 
     text-align:center;
 
     text-shadow:
-        2px 2px 6px black;
-
-    pointer-events:none;
-
-    z-index:800;
-
-    animation:welcomeAnim 6s forwards;
-}
-
-#welcome h1{
-    font-size:27px;
-    font-weight:normal;
-}
-
-#welcome div{
-    font-size:15px;
-    line-height:22px;
-}
-
-@keyframes welcomeAnim{
-    0%{
-        opacity:0;
-        transform:scale(.9);
-    }
-
-    20%{
-        opacity:1;
-        transform:scale(1);
-    }
-
-    80%{
-        opacity:1;
-    }
-
-    100%{
-        opacity:0;
-        pointer-events:none;
-    }
-}
-
-/* =========================================================
-   ADMIN ANNOUNCEMENTS
-========================================================= */
-
-#announcementContainer{
-    position:absolute;
-
-    top:75px;
-    left:50%;
-
-    transform:translateX(-50%);
-
-    width:80%;
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:center;
-
-    gap:8px;
-
-    pointer-events:none;
-
-    z-index:700;
-}
-
-.announcement{
-    min-width:280px;
-    max-width:760px;
-
-    padding:9px 18px;
-
-    background:rgba(55,55,55,.68);
-
-    border:1px solid rgba(255,255,255,.12);
-
-    border-radius:3px;
-
-    color:white;
-
-    text-align:center;
-
-    font-size:17px;
-
-    text-shadow:
-        1px 1px 2px black;
-
-    box-shadow:
-        0 2px 8px rgba(0,0,0,.25);
+        2px 2px 3px #000;
 
     opacity:0;
 
-    transform:scale(.9);
-
     animation:
-        announcementIn .22s forwards,
-        announcementOut .5s 4.5s forwards;
+        mIn .2s forwards,
+        mOut .5s 4.5s forwards;
 }
 
-@keyframes announcementIn{
+@keyframes mIn{
+
+    from{
+        opacity:0;
+    }
+
     to{
         opacity:1;
-        transform:scale(1);
     }
+
 }
 
-@keyframes announcementOut{
+@keyframes mOut{
+
+    from{
+        opacity:1;
+    }
+
     to{
         opacity:0;
-        transform:scale(.97);
     }
+
 }
+
+
+/* =========================================================
+   FULL WIDTH :H
+========================================================= */
+
+#hContainer{
+    position:fixed;
+
+    top:36px;
+    left:0;
+    right:0;
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+    pointer-events:none;
+
+    z-index:4000;
+}
+
+.hMessage{
+    width:100%;
+    min-width:100%;
+    max-width:100%;
+
+    padding:
+        8px 20px;
+
+    background:
+        rgba(65,65,65,.58);
+
+    border:0;
+
+    color:white;
+
+    font-size:16px;
+
+    text-align:center;
+
+    text-shadow:
+        1px 1px 2px #000;
+
+    opacity:0;
+
+    transform:
+        translateY(-5px);
+
+    animation:
+        hIn .18s forwards,
+        hOut .4s 4s forwards;
+}
+
+@keyframes hIn{
+
+    to{
+        opacity:1;
+
+        transform:
+            translateY(0);
+    }
+
+}
+
+@keyframes hOut{
+
+    to{
+        opacity:0;
+
+        transform:
+            translateY(-5px);
+    }
+
+}
+
+
+/* =========================================================
+   INVENTORY
+========================================================= */
+
+#inventory{
+    position:fixed;
+
+    left:50%;
+    bottom:7px;
+
+    transform:
+        translateX(-50%);
+
+    display:flex;
+
+    gap:2px;
+
+    z-index:4700;
+}
+
+
+/* =========================================================
+   INVENTORY SLOT
+========================================================= */
+
+.slot{
+    position:relative;
+
+    width:52px;
+    height:52px;
+
+    background:
+        rgba(115,115,115,.62);
+
+    border:0;
+    outline:0;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+
+    box-shadow:none;
+
+    color:white;
+
+    z-index:1;
+}
+
+
+/* Do NOT change the transparency on hover */
+
+.slot:hover{
+    background:
+        rgba(115,115,115,.62);
+}
+
+
+/* =========================================================
+   SELECTED SLOT
+   THE OUTLINE IS ITS OWN TOP LAYER
+========================================================= */
+
+.slot.selected{
+    background:
+        rgba(115,115,115,.62);
+
+    border:0;
+    outline:0;
+
+    box-shadow:none;
+
+    z-index:20;
+}
+
+.slot.selected::after{
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    border:
+        4px solid #8fd8ff;
+
+    pointer-events:none;
+
+    z-index:100;
+}
+
+
+/* =========================================================
+   INVENTORY NUMBER
+   TOP LEFT
+========================================================= */
+
+.slotNumber{
+    position:absolute;
+
+    top:3px;
+    left:4px;
+
+    color:white;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    line-height:12px;
+
+    text-shadow:
+        1px 1px 2px #000;
+
+    z-index:5;
+}
+
+
+/* =========================================================
+   CENTERED TOOL NAME
+========================================================= */
+
+.toolName{
+    position:static;
+
+    color:white;
+
+    font-size:11px;
+
+    font-weight:normal;
+
+    text-align:center;
+
+    text-shadow:
+        1px 1px 2px #000;
+
+    pointer-events:none;
+
+    max-width:100%;
+
+    padding:3px;
+}
+
+
+/* =========================================================
+   IMAGE TOOL
+   IF IMAGE EXISTS, NO TEXT IS SHOWN
+========================================================= */
+
+.toolImage{
+    width:38px;
+    height:38px;
+
+    object-fit:contain;
+
+    display:block;
+
+    pointer-events:none;
+}
+
 
 /* =========================================================
    COMMAND BROWSER
 ========================================================= */
 
 #browser{
-    position:absolute;
+    position:fixed;
 
-    inset:0;
+    top:36px;
+    left:0;
+    right:0;
+    bottom:0;
 
-    background:rgba(0,0,0,.38);
+    background:
+        rgba(0,0,0,.30);
 
     display:none;
 
-    justify-content:center;
     align-items:center;
+    justify-content:center;
 
-    z-index:850;
+    z-index:6000;
 }
 
 #browserBox{
-    width:700px;
-    height:500px;
+    width:690px;
+    height:490px;
 
-    background:rgba(35,35,35,.91);
+    background:
+        rgba(40,40,40,.91);
 
-    border:1px solid rgba(255,255,255,.14);
+    border:
+        1px solid rgba(255,255,255,.13);
 
     box-shadow:
-        0 5px 25px rgba(0,0,0,.55);
-
-    color:white;
-
-    overflow:hidden;
+        0 4px 18px rgba(0,0,0,.6);
 
     padding:12px;
+
+    color:white;
 }
 
 #browserTitle{
-    font-size:18px;
+    font-size:17px;
 
-    margin-bottom:9px;
-
-    text-shadow:
-        1px 1px 2px black;
+    margin-bottom:4px;
 }
 
 #browserHint{
-    font-size:11px;
-
     color:#aaa;
+
+    font-size:11px;
 
     margin-bottom:8px;
 }
@@ -404,60 +680,56 @@ body{
 #search{
     width:100%;
 
-    height:32px;
+    height:31px;
 
-    padding:6px 8px;
-
-    border:1px solid #555;
-
-    outline:none;
+    padding:
+        6px 8px;
 
     background:#eee;
 
     color:#222;
 
-    font-size:14px;
+    border:
+        1px solid #555;
+
+    outline:none;
+
+    font-size:13px;
 }
 
 #commandList{
-    height:408px;
+    height:407px;
+
+    margin-top:8px;
 
     overflow-y:auto;
-
-    margin-top:9px;
 }
 
 .command{
-    padding:8px 9px;
+    padding:8px;
 
-    border-bottom:1px solid rgba(255,255,255,.08);
+    border-bottom:
+        1px solid rgba(255,255,255,.08);
 
     cursor:pointer;
-
-    font-size:13px;
-
-    transition:
-        background .08s;
 }
 
 .command:hover,
 .command.selected{
-    background:rgba(255,255,255,.09);
+    background:
+        rgba(255,255,255,.09);
 }
 
 .commandName{
-    font-size:15px;
+    font-size:14px;
 
-    color:#fff;
-
-    text-shadow:
-        1px 1px 2px black;
+    font-weight:bold;
 }
 
 .commandUsage{
     color:#aaa;
 
-    font-size:11px;
+    font-size:10px;
 
     margin-top:2px;
 }
@@ -465,263 +737,53 @@ body{
 .commandDescription{
     color:#ddd;
 
-    font-size:12px;
-
-    margin-top:3px;
-}
-
-/* =========================================================
-   INVENTORY / BACKPACK
-========================================================= */
-
-#inventory{
-    position:absolute;
-
-    bottom:8px;
-    left:50%;
-
-    transform:translateX(-50%);
-
-    display:flex;
-
-    gap:3px;
-
-    z-index:600;
-
-    pointer-events:auto;
-}
-
-.slot{
-    position:relative;
-
-    width:54px;
-    height:54px;
-
-    background:
-        linear-gradient(
-            rgba(220,220,220,.86),
-            rgba(155,155,155,.86)
-        );
-
-    border:2px solid #333;
-
-    box-shadow:
-        inset 1px 1px 0 rgba(255,255,255,.8),
-        inset -1px -1px 0 rgba(0,0,0,.55),
-        0 1px 3px rgba(0,0,0,.6);
-
-    display:flex;
-
-    justify-content:center;
-    align-items:center;
-
-    cursor:pointer;
-}
-
-.slot:hover{
-    background:
-        linear-gradient(
-            rgba(240,240,240,.95),
-            rgba(175,175,175,.95)
-        );
-}
-
-.slot.selected{
-    border-color:#fff;
-
-    box-shadow:
-        inset 1px 1px 0 rgba(255,255,255,.9),
-        inset -1px -1px 0 rgba(0,0,0,.55),
-        0 0 0 1px #555;
-}
-
-.slotNumber{
-    position:absolute;
-
-    left:3px;
-    bottom:1px;
-
-    color:white;
-
-    font-size:13px;
-
-    font-weight:bold;
-
-    line-height:14px;
-
-    text-shadow:
-        1px 1px 2px black;
-}
-
-.toolIcon{
-    width:38px;
-    height:38px;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    color:#333;
-
-    font-weight:bold;
-
-    font-size:10px;
-
-    text-align:center;
-}
-
-.swordIcon{
-    position:relative;
-
-    width:9px;
-    height:35px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #777,
-            #eee,
-            #888
-        );
-
-    transform:rotate(43deg);
-
-    box-shadow:
-        1px 1px 2px rgba(0,0,0,.7);
-}
-
-.swordIcon:before{
-    content:"";
-
-    position:absolute;
-
-    width:18px;
-    height:5px;
-
-    left:-5px;
-    bottom:6px;
-
-    background:#80562d;
-
-    border:1px solid #4b321d;
-}
-
-.swordIcon:after{
-    content:"";
-
-    position:absolute;
-
-    width:7px;
-    height:7px;
-
-    left:1px;
-    bottom:0;
-
-    background:#d7a22c;
-
-    border:1px solid #765300;
-}
-
-/* F3X */
-
-.buildIcon{
-    font-size:9px;
-
-    color:#333;
-
-    font-weight:bold;
-
-    text-shadow:none;
-
-    line-height:10px;
-}
-
-/* BTOOLS */
-
-.btoolIcon{
-    width:29px;
-    height:29px;
-
-    border:2px solid #555;
-
-    background:#ccc;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    font-size:8px;
-
-    color:#333;
-
-    font-weight:bold;
-}
-
-/* =========================================================
-   COMMAND MODE INDICATOR
-========================================================= */
-
-#modeIndicator{
-    position:absolute;
-
-    bottom:48px;
-    left:10px;
-
-    color:#ddd;
-
     font-size:11px;
 
-    text-shadow:
-        1px 1px 2px black;
-
-    display:none;
-
-    z-index:901;
+    margin-top:2px;
 }
-
-/* =========================================================
-   SCROLLBAR
-========================================================= */
 
 #commandList::-webkit-scrollbar{
     width:8px;
 }
 
 #commandList::-webkit-scrollbar-track{
-    background:rgba(0,0,0,.2);
+    background:
+        rgba(0,0,0,.2);
 }
 
 #commandList::-webkit-scrollbar-thumb{
-    background:rgba(180,180,180,.45);
+    background:
+        rgba(180,180,180,.45);
 }
 
+
 /* =========================================================
-   HELP PANEL
+   HELP
 ========================================================= */
 
 #helpPanel{
-    position:absolute;
+    position:fixed;
 
-    left:10px;
-    bottom:55px;
+    left:8px;
+    top:255px;
 
     width:330px;
 
     padding:9px;
 
-    background:rgba(40,40,40,.78);
+    background:
+        rgba(45,45,45,.72);
 
     color:#ddd;
 
     font-size:11px;
 
+    border:
+        1px solid rgba(255,255,255,.1);
+
     display:none;
 
-    z-index:500;
-
-    border:1px solid rgba(255,255,255,.1);
+    z-index:4800;
 }
 
 #helpPanel b{
@@ -731,91 +793,151 @@ body{
 </style>
 </head>
 
+
 <body>
+
 
 <!-- =======================================================
      TOPBAR
-======================================================== -->
+======================================================= -->
 
 <div id="topbar">
 
-    <div class="icon">☰</div>
+    <div
+        class="topIcon"
+        id="robloxLogo"
+    >
+        <img
+            src=""
+            alt=""
+        >
+    </div>
 
-    <div class="icon">💬</div>
+    <div
+        class="topIcon"
+        id="topIconMenu"
+    >
+        <img
+            src=""
+            alt=""
+        >
+    </div>
 
-    <div class="icon" id="backpackButton">🎒</div>
+    <div
+        class="topIcon"
+        id="topIconChat"
+    >
+        <img
+            src=""
+            alt=""
+        >
+    </div>
+
+    <div
+        class="topIcon"
+        id="topIconBackpack"
+    >
+        <img
+            src=""
+            alt=""
+        >
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     LEADERBOARD
+======================================================= -->
+
+<div id="leaderboard">
+
+    <div class="leaderHeader">
+
+        <span>
+            Player
+        </span>
+
+        <span>
+            Points
+        </span>
+
+    </div>
+
+    <div class="leaderPlayer">
+
+        <span class="playerName">
+            Player
+        </span>
+
+        <span class="playerRank">
+            100
+        </span>
+
+    </div>
+
+    <div class="leaderPlayer">
+
+        <span class="playerName">
+            Guest666
+        </span>
+
+        <span class="playerRank">
+            50
+        </span>
+
+    </div>
+
+    <div class="leaderPlayer">
+
+        <span class="playerName">
+            Builderman
+        </span>
+
+        <span class="playerRank">
+            25
+        </span>
+
+    </div>
 
 </div>
 
 
 <!-- =======================================================
      CHAT
-======================================================== -->
+======================================================= -->
 
-<div id="chat"></div>
+<div id="chatPanel">
 
-<input
-    id="chatInput"
-    autocomplete="off"
-    spellcheck="false"
-    placeholder="To chat click here or press '/' key"
->
+    <div id="chatMessages"></div>
 
-<div id="modeIndicator"></div>
-
-
-<!-- =======================================================
-     PLAYER LIST
-======================================================== -->
-
-<div id="players">
-
-    <div class="player">Player</div>
-    <div class="player">Guest666</div>
-    <div class="player">Builderman</div>
+    <input
+        id="chatInput"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="To chat click here or press '/' key"
+    >
 
 </div>
 
 
 <!-- =======================================================
-     WELCOME
-======================================================== -->
+     FULL SCREEN MESSAGE
+======================================================= -->
 
-<div id="welcome">
-
-    <h1>Kohl's Admin Infinite</h1>
-
-    <br>
-
-    <div>Welcome!</div>
-
-    <br>
-
-    <div>You're a Game Creator!</div>
-
-    <div>Chat :cmds for all the commands</div>
-
-    <div>Chat :help for general usage</div>
-
-    <br>
-
-    <div>Enjoy the admin!</div>
-
-    <div>Give it a thumbs up!</div>
-
-</div>
+<div id="mContainer"></div>
 
 
 <!-- =======================================================
-     ANNOUNCEMENTS
-======================================================== -->
+     HINT
+======================================================= -->
 
-<div id="announcementContainer"></div>
+<div id="hContainer"></div>
 
 
 <!-- =======================================================
      COMMAND BROWSER
-======================================================== -->
+======================================================= -->
 
 <div id="browser">
 
@@ -826,7 +948,7 @@ body{
         </div>
 
         <div id="browserHint">
-            Type a command and press Enter to execute it.
+            Type a command and press Enter to execute.
         </div>
 
         <input
@@ -845,28 +967,48 @@ body{
 
 <!-- =======================================================
      INVENTORY
-======================================================== -->
+======================================================= -->
 
 <div id="inventory"></div>
 
 
 <!-- =======================================================
      HELP
-======================================================== -->
+======================================================= -->
 
 <div id="helpPanel">
 
-    <b>Command Usage</b><br><br>
+    <b>Command Usage</b>
 
-    :kill [player]<br>
-    :heal [player]<br>
-    :speed [player] [amount]<br>
-    :h [message]<br>
-    :m [message]<br>
-    :sword<br>
-    :btools<br>
-    :f3x<br>
-    :cmds<br>
+    <br><br>
+
+    :kill [player]
+    <br>
+
+    :heal [player]
+    <br>
+
+    :speed [player] [amount]
+    <br>
+
+    :h [message]
+    <br>
+
+    :m [message]
+    <br>
+
+    :sword
+    <br>
+
+    :btools
+    <br>
+
+    :f3x
+    <br>
+
+    :cmds
+    <br>
+
     :help
 
 </div>
@@ -874,7 +1016,7 @@ body{
 
 <!-- =======================================================
      SOUND
-======================================================== -->
+======================================================= -->
 
 <audio
     id="cmdSound"
@@ -884,8 +1026,105 @@ body{
 
 <script>
 
+
 /* =========================================================
-   COMMAND SYSTEM
+   TOPBAR ICON IMAGES
+   =========================================================
+
+   PUT YOUR IMAGE URLS HERE.
+
+   Example:
+
+   logo:
+       "https://example.com/logo.png"
+
+   If you leave one as "",
+   that icon will simply be invisible.
+
+========================================================= */
+
+const topbarIcons = {
+
+    logo:
+        "",
+
+    menu:
+        "",
+
+    chat:
+        "",
+
+    backpack:
+        ""
+
+};
+
+
+/* =========================================================
+   APPLY TOPBAR ICONS
+========================================================= */
+
+function setTopbarIcon(
+    id,
+    url
+){
+
+    const element =
+        document.querySelector(
+            id + " img"
+        );
+
+
+    if(!element){
+        return;
+    }
+
+
+    if(url){
+
+        element.src =
+            url;
+
+        element.style.display =
+            "block";
+
+    }
+
+    else{
+
+        element.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* APPLY THE FOUR ICONS */
+
+setTopbarIcon(
+    "#robloxLogo",
+    topbarIcons.logo
+);
+
+setTopbarIcon(
+    "#topIconMenu",
+    topbarIcons.menu
+);
+
+setTopbarIcon(
+    "#topIconChat",
+    topbarIcons.chat
+);
+
+setTopbarIcon(
+    "#topIconBackpack",
+    topbarIcons.backpack
+);
+
+
+/* =========================================================
+   COMMAND DATA
 ========================================================= */
 
 const commandData = {
@@ -897,7 +1136,7 @@ const commandData = {
     },
 
     heal:{
-        aliases:["hll"],
+        aliases:["hl"],
         usage:"heal [player]",
         description:"Heals a player"
     },
@@ -923,7 +1162,7 @@ const commandData = {
     ff:{
         aliases:["forcefield"],
         usage:"ff [player]",
-        description:"Gives a player a forcefield"
+        description:"Gives a forcefield"
     },
 
     unff:{
@@ -956,46 +1195,58 @@ const commandData = {
         description:"Removes fire"
     },
 
-    smoke:{
-        aliases:[],
-        usage:"smoke [player]",
-        description:"Adds smoke"
-    },
-
-    unsmoke:{
-        aliases:[],
-        usage:"unsmoke [player]",
-        description:"Removes smoke"
-    },
-
     explode:{
         aliases:["ex"],
         usage:"explode [player]",
         description:"Explodes a player"
     },
 
-    music:{
-        aliases:["m"],
-        usage:"music [id]",
-        description:"Plays music"
+    h:{
+        aliases:["hint"],
+        usage:"h [message]",
+        description:"Displays a hint below the topbar"
     },
 
-    stopmusic:{
-        aliases:["sm"],
-        usage:"stopmusic",
-        description:"Stops music"
+    m:{
+        aliases:["message"],
+        usage:"m [message]",
+        description:"Displays a full-screen message"
+    },
+
+    sword:{
+        aliases:[],
+        usage:"sword",
+        description:"Gives the classic sword"
+    },
+
+    f3x:{
+        aliases:["f3"],
+        usage:"f3x",
+        description:"Gives Building Tools"
+    },
+
+    btools:{
+        aliases:["btool","bt"],
+        usage:"btools",
+        description:"Gives Delete, Clone and Move tools"
+    },
+
+    cmds:{
+        aliases:["commands"],
+        usage:"cmds",
+        description:"Shows the command browser"
+    },
+
+    help:{
+        aliases:["?"],
+        usage:"help",
+        description:"Shows general command usage"
     },
 
     god:{
         aliases:[],
         usage:"god [player]",
         description:"Makes a player invincible"
-    },
-
-    ungod:{
-        aliases:[],
-        usage:"ungod [player]",
-        description:"Removes god mode"
     },
 
     fly:{
@@ -1013,13 +1264,13 @@ const commandData = {
     noclip:{
         aliases:["nc"],
         usage:"noclip [player]",
-        description:"Allows walking through objects"
+        description:"Enables noclip"
     },
 
     clip:{
         aliases:[],
         usage:"clip [player]",
-        description:"Removes noclip"
+        description:"Disables noclip"
     },
 
     sit:{
@@ -1032,148 +1283,124 @@ const commandData = {
         aliases:[],
         usage:"jump [player]",
         description:"Makes a player jump"
-    },
-
-    h:{
-        aliases:[],
-        usage:"h [message]",
-        description:"Displays a large server announcement"
-    },
-
-    m:{
-        aliases:[],
-        usage:"m [message]",
-        description:"Displays a server message"
-    },
-
-    sword:{
-        aliases:[],
-        usage:"sword",
-        description:"Gives the classic sword"
-    },
-
-    btools:{
-        aliases:["btool","bt"],
-        usage:"btools",
-        description:"Gives the classic building tools"
-    },
-
-    f3x:{
-        aliases:["f3"],
-        usage:"f3x",
-        description:"Gives Building Tools"
-    },
-
-    cmds:{
-        aliases:["commands"],
-        usage:"cmds",
-        description:"Shows the command list"
-    },
-
-    help:{
-        aliases:["?"],
-        usage:"help",
-        description:"Shows general command usage"
     }
 
 };
 
 
 /* =========================================================
+   ROBLOX-STYLE PLAYER NAME COLOR
+========================================================= */
+
+const robloxNameColors = [
+
+    "#F2F2F2",
+    "#D7D7D7",
+    "#C42828",
+    "#E67E22",
+    "#F1C40F",
+    "#2ECC71",
+    "#3498DB",
+    "#9B59B6",
+    "#E91E63",
+    "#795548",
+    "#00BCD4",
+    "#8BC34A",
+    "#FF7043",
+    "#7E57C2",
+    "#26A69A"
+
+];
+
+const playerColor =
+    robloxNameColors[
+        Math.floor(
+            Math.random() *
+            robloxNameColors.length
+        )
+    ];
+
+
+/* =========================================================
    ELEMENTS
 ========================================================= */
 
-const chat =
-    document.getElementById("chat");
+const chatMessages =
+    document.getElementById(
+        "chatMessages"
+    );
 
 const input =
-    document.getElementById("chatInput");
+    document.getElementById(
+        "chatInput"
+    );
 
 const browser =
-    document.getElementById("browser");
+    document.getElementById(
+        "browser"
+    );
 
 const search =
-    document.getElementById("search");
+    document.getElementById(
+        "search"
+    );
 
 const commandList =
-    document.getElementById("commandList");
+    document.getElementById(
+        "commandList"
+    );
 
 const inventory =
-    document.getElementById("inventory");
+    document.getElementById(
+        "inventory"
+    );
 
-const announcementContainer =
-    document.getElementById("announcementContainer");
+const mContainer =
+    document.getElementById(
+        "mContainer"
+    );
 
-const modeIndicator =
-    document.getElementById("modeIndicator");
+const hContainer =
+    document.getElementById(
+        "hContainer"
+    );
 
 const helpPanel =
-    document.getElementById("helpPanel");
+    document.getElementById(
+        "helpPanel"
+    );
 
 const cmdSound =
-    document.getElementById("cmdSound");
+    document.getElementById(
+        "cmdSound"
+    );
 
 
 /* =========================================================
    STATE
 ========================================================= */
 
-let mode = null;
+let mode = "chat";
 
 let history = [];
 
 let historyIndex = 0;
 
-let selectedCommand = 0;
-
 let tools = [];
 
+let selectedSlot = -1;
 
-/* =========================================================
-   CHAT
-========================================================= */
-
-function addMessage(text, system=false){
-
-    const div =
-        document.createElement("div");
-
-    div.className =
-        "chatMessage fade" +
-        (system ? " system" : "");
-
-    div.innerHTML = text;
-
-    chat.appendChild(div);
-
-    while(chat.children.length > 15){
-        chat.removeChild(chat.firstChild);
-    }
-
-    setTimeout(()=>{
-        if(div.parentNode){
-            div.remove();
-        }
-    },20500);
-}
-
-
-function playerMessage(text){
-
-    addMessage(
-        `<span class="name">[Player]</span>: ${escapeHTML(text)}`
-    );
-
-}
+let selectedCommand = 0;
 
 
 /* =========================================================
-   SAFE TEXT
+   HTML ESCAPING
 ========================================================= */
 
 function escapeHTML(text){
 
     return String(text)
+
         .replace(/&/g,"&amp;")
         .replace(/</g,"&lt;")
         .replace(/>/g,"&gt;")
@@ -1184,163 +1411,376 @@ function escapeHTML(text){
 
 
 /* =========================================================
-   ANNOUNCEMENTS
+   CHAT MESSAGE
 ========================================================= */
 
-function announcement(text){
+function addMessage(
+    html
+){
 
     const div =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     div.className =
-        "announcement";
+        "chatMessage";
 
-    div.textContent =
-        text;
+    div.innerHTML =
+        html;
 
-    announcementContainer.appendChild(div);
+    chatMessages.appendChild(
+        div
+    );
 
-    setTimeout(()=>{
-        div.remove();
-    },5100);
+
+    while(
+        chatMessages.children.length > 12
+    ){
+
+        chatMessages.removeChild(
+            chatMessages.firstChild
+        );
+
+    }
 
 }
 
 
 /* =========================================================
-   INVENTORY
+   NORMAL PLAYER MESSAGE
 ========================================================= */
 
-function addTool(name,type){
+function playerMessage(
+    text
+){
 
-    if(tools.some(tool => tool.name === name)){
-        return;
-    }
+    addMessage(
 
-    if(tools.length >= 10){
-        addMessage(
-            `<span class="kohl">[Kohl]</span>: Your inventory is full.`
+        `<span
+            class="playerChatName"
+            style="color:${playerColor}"
+        >[Player]</span>: ${escapeHTML(text)}`
+
+    );
+
+}
+
+
+/* =========================================================
+   :M
+========================================================= */
+
+function showMessage(
+    text
+){
+
+    const div =
+        document.createElement(
+            "div"
         );
+
+    div.className =
+        "mMessage";
+
+    div.textContent =
+        text;
+
+    mContainer.appendChild(
+        div
+    );
+
+
+    setTimeout(
+        ()=>{
+
+            div.remove();
+
+        },
+        5100
+    );
+
+}
+
+
+/* =========================================================
+   :H
+========================================================= */
+
+function showHint(
+    text
+){
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.className =
+        "hMessage";
+
+    div.textContent =
+        text;
+
+    hContainer.appendChild(
+        div
+    );
+
+
+    setTimeout(
+        ()=>{
+
+            div.remove();
+
+        },
+        4500
+    );
+
+}
+
+
+/* =========================================================
+   ADD TOOL
+========================================================= */
+
+function addTool(
+    name,
+    type,
+    image=null
+){
+
+    /*
+       Don't give duplicate tools.
+    */
+
+    if(
+        tools.some(
+            tool =>
+                tool.name === name
+        )
+    ){
+
         return;
+
     }
+
+
+    /*
+       Maximum 10 slots.
+    */
+
+    if(
+        tools.length >= 10
+    ){
+
+        return;
+
+    }
+
 
     tools.push({
+
         name:name,
-        type:type
+
+        type:type,
+
+        image:image
+
     });
+
 
     renderInventory();
 
 }
 
 
+/* =========================================================
+   RENDER INVENTORY
+========================================================= */
+
 function renderInventory(){
 
     inventory.innerHTML = "";
 
-    tools.forEach((tool,index)=>{
 
-        const slot =
-            document.createElement("div");
+    tools.forEach(
+        (tool,index)=>{
 
-        slot.className =
-            "slot";
-
-        slot.dataset.index =
-            index;
-
-        let icon = "";
-
-        if(tool.type === "sword"){
-
-            icon =
-                `<div class="toolIcon">
-                    <div class="swordIcon"></div>
-                </div>`;
-
-        }
-        else if(tool.type === "f3x"){
-
-            icon =
-                `<div class="toolIcon buildIcon">
-                    BUILDING<br>TOOLS
-                </div>`;
-
-        }
-        else if(tool.type === "delete"){
-
-            icon =
-                `<div class="toolIcon">
-                    <div class="btoolIcon">DEL</div>
-                </div>`;
-
-        }
-        else if(tool.type === "clone"){
-
-            icon =
-                `<div class="toolIcon">
-                    <div class="btoolIcon">CLN</div>
-                </div>`;
-
-        }
-        else if(tool.type === "move"){
-
-            icon =
-                `<div class="toolIcon">
-                    <div class="btoolIcon">MOV</div>
-                </div>`;
-
-        }
-
-        slot.innerHTML =
-            icon +
-            `<div class="slotNumber">${index+1}</div>`;
-
-        slot.title =
-            tool.name;
-
-        slot.addEventListener("click",()=>{
-
-            document
-                .querySelectorAll(".slot")
-                .forEach(x =>
-                    x.classList.remove("selected")
+            const slot =
+                document.createElement(
+                    "div"
                 );
 
-            slot.classList.add("selected");
 
-        });
+            slot.className =
+                "slot";
 
-        inventory.appendChild(slot);
 
-    });
+            if(
+                index === selectedSlot
+            ){
+
+                slot.classList.add(
+                    "selected"
+                );
+
+            }
+
+
+            /*
+                NUMBER:
+                TOP LEFT
+            */
+
+            const number =
+                document.createElement(
+                    "div"
+                );
+
+            number.className =
+                "slotNumber";
+
+            number.textContent =
+                index + 1;
+
+            slot.appendChild(
+                number
+            );
+
+
+            /*
+                IMAGE TOOL:
+                SHOW IMAGE ONLY.
+                NEVER SHOW NAME.
+            */
+
+            if(
+                tool.image
+            ){
+
+                const image =
+                    document.createElement(
+                        "img"
+                    );
+
+                image.className =
+                    "toolImage";
+
+                image.src =
+                    tool.image;
+
+                image.alt =
+                    "";
+
+                slot.appendChild(
+                    image
+                );
+
+            }
+
+
+            /*
+                TEXT TOOL:
+                SHOW ONE CENTERED NAME.
+            */
+
+            else{
+
+                const name =
+                    document.createElement(
+                        "div"
+                    );
+
+                name.className =
+                    "toolName";
+
+                name.textContent =
+                    tool.name;
+
+                slot.appendChild(
+                    name
+                );
+
+            }
+
+
+            /*
+                SELECT / UNSELECT
+            */
+
+            slot.addEventListener(
+                "click",
+                ()=>{
+
+                    if(
+                        selectedSlot === index
+                    ){
+
+                        selectedSlot =
+                            -1;
+
+                    }
+
+                    else{
+
+                        selectedSlot =
+                            index;
+
+                    }
+
+                    renderInventory();
+
+                }
+            );
+
+
+            inventory.appendChild(
+                slot
+            );
+
+        }
+    );
 
 }
 
 
 /* =========================================================
-   COMMAND LOOKUP
+   RESOLVE COMMAND
 ========================================================= */
 
-function resolveCommand(name){
+function resolveCommand(
+    name
+){
 
     name =
         name.toLowerCase();
 
-    if(commandData[name]){
+
+    if(
+        commandData[name]
+    ){
+
         return name;
+
     }
 
-    for(const command in commandData){
+
+    for(
+        const command in commandData
+    ){
 
         if(
-            commandData[command].aliases
+            commandData[command]
+                .aliases
                 .includes(name)
         ){
+
             return command;
+
         }
 
     }
+
 
     return null;
 
@@ -1351,152 +1791,122 @@ function resolveCommand(name){
    COMMAND BROWSER
 ========================================================= */
 
-function refreshCommands(filter=""){
+function refreshCommands(
+    filter=""
+){
 
     commandList.innerHTML = "";
 
+
     const value =
-        filter.toLowerCase().trim();
+        filter
+            .toLowerCase()
+            .trim();
+
 
     const results =
-        Object.entries(commandData)
-        .filter(([name,data])=>{
+        Object.entries(
+            commandData
+        )
+        .filter(
+            ([name,data])=>{
 
-            if(!value){
-                return true;
+                return (
+
+                    !value ||
+
+                    name.includes(
+                        value
+                    ) ||
+
+                    data.aliases.some(
+                        alias =>
+                            alias.includes(
+                                value
+                            )
+                    )
+
+                );
+
+            }
+        );
+
+
+    results.forEach(
+        ([name,data],index)=>{
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.className =
+                "command";
+
+
+            if(
+                index === selectedCommand
+            ){
+
+                div.classList.add(
+                    "selected"
+                );
+
             }
 
-            return (
-                name.includes(value) ||
-                data.aliases.some(alias =>
-                    alias.includes(value)
-                )
+
+            div.innerHTML = `
+
+                <div class="commandName">
+                    ${name}
+                </div>
+
+                <div class="commandUsage">
+                    ${data.usage}
+                </div>
+
+                <div class="commandDescription">
+                    ${data.description}
+                </div>
+
+            `;
+
+
+            commandList.appendChild(
+                div
             );
 
-        });
-
-    if(results.length === 0){
-
-        commandList.innerHTML =
-            `<div class="command">
-                <div class="commandName">
-                    No commands found
-                </div>
-            </div>`;
-
-        return;
-    }
-
-    results.forEach(([name,data],index)=>{
-
-        const div =
-            document.createElement("div");
-
-        div.className =
-            "command" +
-            (index === selectedCommand
-                ? " selected"
-                : "");
-
-        div.innerHTML = `
-            <div class="commandName">
-                ${name}
-            </div>
-
-            <div class="commandUsage">
-                ${data.usage}
-            </div>
-
-            <div class="commandDescription">
-                ${data.description}
-            </div>
-        `;
-
-        div.addEventListener("click",()=>{
-
-            search.value =
-                data.usage;
-
-            search.focus();
-
-        });
-
-        commandList.appendChild(div);
-
-    });
+        }
+    );
 
 }
 
 
 /* =========================================================
-   OPEN COMMAND MODE
-========================================================= */
-
-function openCommandMode(){
-
-    mode = "command";
-
-    input.style.display =
-        "block";
-
-    modeIndicator.style.display =
-        "block";
-
-    modeIndicator.textContent =
-        "COMMAND MODE — Press Enter to execute";
-
-    input.value = ":";
-
-    input.focus();
-
-    moveCursorEnd();
-
-}
-
-
-/* =========================================================
-   OPEN NORMAL CHAT
-========================================================= */
-
-function openChatMode(){
-
-    mode = "chat";
-
-    input.style.display =
-        "block";
-
-    modeIndicator.style.display =
-        "block";
-
-    modeIndicator.textContent =
-        "CHAT";
-
-    input.value = "";
-
-    input.placeholder =
-        "To chat click here or press '/' key";
-
-    input.focus();
-
-}
-
-
-/* =========================================================
-   OPEN BROWSER
+   OPEN COMMAND BROWSER
 ========================================================= */
 
 function openBrowser(){
 
-    mode = "browser";
+    mode =
+        "browser";
+
 
     browser.style.display =
         "flex";
 
-    search.value = "";
 
-    selectedCommand = 0;
+    search.value =
+        "";
+
+
+    selectedCommand =
+        0;
+
 
     refreshCommands();
+
 
     search.focus();
 
@@ -1504,240 +1914,282 @@ function openBrowser(){
 
 
 /* =========================================================
-   CLOSE NORMAL MODES
+   EXECUTE COMMAND
 ========================================================= */
 
-function closeInput(){
-
-    input.style.display =
-        "none";
-
-    modeIndicator.style.display =
-        "none";
-
-    mode = null;
-
-}
-
-
-/* =========================================================
-   BROWSER EXECUTION
-========================================================= */
-
-function executeBrowserCommand(){
-
-    const raw =
-        search.value.trim();
-
-    if(!raw){
-        return;
-    }
-
-    let command =
-        raw;
-
-    if(command.startsWith(":")){
-        command =
-            command.substring(1);
-    }
-
-    executeCommand(command);
-
-    /*
-        IMPORTANT:
-        Browser closes ONLY because Enter
-        executed the command.
-
-        Escape does NOT close it.
-    */
-
-    browser.style.display =
-        "none";
-
-    mode = null;
-
-}
-
-
-/* =========================================================
-   COMMAND EXECUTION
-========================================================= */
-
-function executeCommand(raw){
+function executeCommand(
+    raw
+){
 
     raw =
         raw.trim();
 
-    if(!raw){
+
+    if(
+        !raw
+    ){
+
         return;
+
     }
 
-    if(raw.startsWith(":")){
+
+    if(
+        raw.startsWith(":")
+    ){
+
         raw =
             raw.substring(1);
+
     }
 
-    const parts =
-        raw.split(/\s+/);
 
-    const enteredName =
-        parts.shift().toLowerCase();
+    const parts =
+        raw.split(
+            /\s+/
+        );
+
+
+    const entered =
+        parts
+            .shift()
+            .toLowerCase();
+
 
     const command =
-        resolveCommand(enteredName);
+        resolveCommand(
+            entered
+        );
 
-    if(!command){
 
-        addMessage(
-            `<span class="kohl">[Kohl]</span>: Unknown command "${escapeHTML(enteredName)}".`
+    /*
+        UNKNOWN COMMAND
+    */
+
+    if(
+        !command
+    ){
+
+        playerMessage(
+            ":" + raw
         );
 
         return;
 
     }
 
+
     const args =
         parts;
 
-    addMessage(
-        `<span class="name">[Player]</span>: :${escapeHTML(raw)}`
+
+    history.push(
+        ":" + raw
     );
 
-    history.push(":" + raw);
 
     historyIndex =
         history.length;
 
+
     try{
-        cmdSound.currentTime = 0;
-        cmdSound.play().catch(()=>{});
+
+        cmdSound.currentTime =
+            0;
+
+        cmdSound.play().catch(
+            ()=>{}
+        );
+
     }
+
     catch(e){}
 
-    runCommand(command,args);
+
+    runCommand(
+        command,
+        args
+    );
 
 }
 
 
 /* =========================================================
-   COMMAND IMPLEMENTATIONS
+   RUN COMMAND
 ========================================================= */
 
-function runCommand(command,args){
+function runCommand(
+    command,
+    args
+){
 
-    switch(command){
+    switch(
+        command
+    ){
 
-        case "h":
+        /* ================================================
+           HINT
+        ================================================ */
+
+        case "h":{
+
+            const message =
+                args.join(" ");
+
+
+            if(
+                message
+            ){
+
+                showHint(
+                    message
+                );
+
+            }
+
+            break;
+
+        }
+
+
+        /* ================================================
+           FULL SCREEN MESSAGE
+        ================================================ */
+
         case "m":{
 
             const message =
                 args.join(" ");
 
-            if(!message){
 
-                addMessage(
-                    `<span class="kohl">[Kohl]</span>: Usage: :${command} [message]`
+            if(
+                message
+            ){
+
+                showMessage(
+                    message
                 );
-
-                return;
 
             }
 
-            announcement(message);
-
             break;
+
         }
 
 
+        /* ================================================
+           SWORD
+        ================================================ */
+
         case "sword":{
+
+            /*
+                No image is supplied here yet,
+                so the tool displays "Sword".
+            */
 
             addTool(
                 "Sword",
                 "sword"
             );
 
-            addMessage(
-                `<span class="kohl">[Kohl]</span>: Gave Sword to Player.`
-            );
-
             break;
+
         }
 
 
+        /* ================================================
+           F3X
+        ================================================ */
+
         case "f3x":{
+
+            /*
+                Exactly ONE centered name.
+            */
 
             addTool(
                 "Building Tools",
                 "f3x"
             );
 
-            addMessage(
-                `<span class="kohl">[Kohl]</span>: Gave Building Tools to Player.`
-            );
-
             break;
+
         }
 
+
+        /* ================================================
+           BTOOLS
+        ================================================ */
 
         case "btools":{
 
-            addTool("Delete","delete");
-            addTool("Clone","clone");
-            addTool("Move","move");
+            addTool(
+                "Delete",
+                "delete"
+            );
 
-            addMessage(
-                `<span class="kohl">[Kohl]</span>: Gave building tools to Player.`
+            addTool(
+                "Clone",
+                "clone"
+            );
+
+            addTool(
+                "Move",
+                "move"
             );
 
             break;
+
         }
 
+
+        /* ================================================
+           COMMANDS
+        ================================================ */
 
         case "cmds":{
 
             openBrowser();
 
             break;
+
         }
 
+
+        /* ================================================
+           HELP
+        ================================================ */
 
         case "help":{
 
             helpPanel.style.display =
-                helpPanel.style.display === "block"
-                    ? "none"
-                    : "block";
 
-            addMessage(
-                `<span class="kohl">[Kohl]</span>: General command usage shown below.`
-            );
+                helpPanel.style.display ===
+                "block"
+
+                ? "none"
+
+                : "block";
 
             break;
+
         }
 
 
+        /*
+            Other commands currently do nothing
+            visually.
+
+            IMPORTANT:
+            There is NO fake:
+            "[Kohl]: Command executed."
+        */
+
         default:{
 
-            const target =
-                args[0] || "Player";
-
-            let extra = "";
-
-            if(command === "speed"){
-
-                const amount =
-                    args[1] || "16";
-
-                extra =
-                    ` to ${escapeHTML(amount)}`;
-
-            }
-
-            addMessage(
-                `<span class="kohl">[Kohl]</span>: ${command} ${escapeHTML(target)}${extra}.`
-            );
-
             break;
+
         }
 
     }
@@ -1746,14 +2198,19 @@ function runCommand(command,args){
 
 
 /* =========================================================
-   HISTORY
+   HISTORY UP
 ========================================================= */
 
 function historyUp(){
 
-    if(history.length === 0){
+    if(
+        !history.length
+    ){
+
         return;
+
     }
+
 
     historyIndex =
         Math.max(
@@ -1761,19 +2218,32 @@ function historyUp(){
             historyIndex - 1
         );
 
+
     input.value =
-        history[historyIndex];
+        history[
+            historyIndex
+        ];
+
 
     moveCursorEnd();
 
 }
 
 
+/* =========================================================
+   HISTORY DOWN
+========================================================= */
+
 function historyDown(){
 
-    if(history.length === 0){
+    if(
+        !history.length
+    ){
+
         return;
+
     }
+
 
     historyIndex =
         Math.min(
@@ -1781,20 +2251,26 @@ function historyDown(){
             historyIndex + 1
         );
 
-    if(historyIndex === history.length){
+
+    if(
+        historyIndex ===
+        history.length
+    ){
 
         input.value =
-            mode === "command"
-                ? ":"
-                : "";
+            "";
 
     }
+
     else{
 
         input.value =
-            history[historyIndex];
+            history[
+                historyIndex
+            ];
 
     }
+
 
     moveCursorEnd();
 
@@ -1807,33 +2283,56 @@ function historyDown(){
 
 function autocomplete(){
 
-    let value =
+    const value =
         input.value;
 
-    if(!value.startsWith(":")){
+
+    if(
+        !value.startsWith(":")
+    ){
+
         return;
+
     }
 
-    let typed =
+
+    const typed =
         value
-        .substring(1)
-        .split(/\s+/)[0]
-        .toLowerCase();
+            .substring(1)
+            .split(
+                /\s+/
+            )[0]
+            .toLowerCase();
 
-    if(!typed){
+
+    if(
+        !typed
+    ){
+
         return;
+
     }
+
 
     const match =
-        Object.keys(commandData)
-        .find(command =>
-            command.startsWith(typed)
+        Object.keys(
+            commandData
+        )
+        .find(
+            command =>
+                command.startsWith(
+                    typed
+                )
         );
 
-    if(match){
+
+    if(
+        match
+    ){
 
         input.value =
             ":" + match;
+
 
         moveCursorEnd();
 
@@ -1842,108 +2341,129 @@ function autocomplete(){
 }
 
 
+/* =========================================================
+   MOVE CURSOR TO END
+========================================================= */
+
 function moveCursorEnd(){
 
-    setTimeout(()=>{
+    setTimeout(
+        ()=>{
 
-        input.selectionStart =
-            input.selectionEnd =
-            input.value.length;
+            input.selectionStart =
+                input.selectionEnd =
+                    input.value.length;
 
-    },0);
+        },
+        0
+    );
 
 }
 
 
 /* =========================================================
-   INPUT KEYBOARD
+   CHAT INPUT
 ========================================================= */
 
 input.addEventListener(
     "keydown",
     e=>{
 
-        if(e.key === "Enter"){
+        /* ENTER */
+
+        if(
+            e.key === "Enter"
+        ){
 
             const value =
                 input.value.trim();
 
-            if(mode === "command"){
 
-                if(value){
-                    executeCommand(value);
+            if(
+                value
+            ){
+
+                if(
+                    value.startsWith(":")
+                ){
+
+                    executeCommand(
+                        value
+                    );
+
                 }
 
-                input.value = ":";
+                else{
 
-                moveCursorEnd();
+                    playerMessage(
+                        value
+                    );
 
-            }
 
-            else if(mode === "chat"){
+                    history.push(
+                        value
+                    );
 
-                if(value){
-
-                    playerMessage(value);
-
-                    history.push(value);
 
                     historyIndex =
                         history.length;
 
                 }
 
-                closeInput();
-
             }
 
+
+            input.value =
+                "";
+
             e.preventDefault();
+
+            return;
 
         }
 
 
-        else if(e.key === "ArrowUp"){
+        /* UP */
+
+        if(
+            e.key === "ArrowUp"
+        ){
 
             historyUp();
 
             e.preventDefault();
 
+            return;
+
         }
 
 
-        else if(e.key === "ArrowDown"){
+        /* DOWN */
+
+        if(
+            e.key === "ArrowDown"
+        ){
 
             historyDown();
 
             e.preventDefault();
 
+            return;
+
         }
 
 
-        else if(e.key === "Tab"){
+        /* TAB */
+
+        if(
+            e.key === "Tab"
+        ){
 
             autocomplete();
 
             e.preventDefault();
 
-        }
-
-
-        /*
-            Escape closes NORMAL chat input.
-
-            It intentionally DOES NOT close the
-            command browser.
-        */
-
-        else if(
-            e.key === "Escape" &&
-            mode !== "browser"
-        ){
-
-            closeInput();
-
-            e.preventDefault();
+            return;
 
         }
 
@@ -1952,7 +2472,7 @@ input.addEventListener(
 
 
 /* =========================================================
-   GLOBAL KEYBOARD
+   GLOBAL HOTKEYS
 ========================================================= */
 
 document.addEventListener(
@@ -1960,131 +2480,93 @@ document.addEventListener(
     e=>{
 
         /*
-            ":" opens command chat
+            If command browser is open,
+            normal hotkeys don't interfere.
         */
 
         if(
-            e.key === ":" &&
-            mode === null
+            mode === "browser"
         ){
 
-            openCommandMode();
-
-            e.preventDefault();
-
             return;
+
         }
 
 
         /*
-            "/" opens normal chat
+            If typing directly into chat,
+            don't create another input.
         */
 
         if(
-            e.key === "/" &&
-            mode === null
+            document.activeElement ===
+            input
         ){
 
-            openChatMode();
-
-            e.preventDefault();
-
             return;
+
         }
 
 
-        /*
-            "{" opens command browser
-        */
+        /* : */
 
         if(
-            e.key === "{" &&
-            mode === null
+            e.key === ":"
+        ){
+
+            input.value =
+                ":";
+
+
+            input.focus();
+
+
+            moveCursorEnd();
+
+
+            e.preventDefault();
+
+        }
+
+
+        /* / */
+
+        else if(
+            e.key === "/"
+        ){
+
+            input.focus();
+
+            e.preventDefault();
+
+        }
+
+
+        /* { */
+
+        else if(
+            e.key === "{"
         ){
 
             openBrowser();
 
             e.preventDefault();
 
-            return;
         }
 
 
-        /*
-            "ñ" also opens command browser
-        */
+        /* ñ */
 
-        if(
-            e.key.toLowerCase() === "ñ" &&
-            mode === null
+        else if(
+            e.key.toLowerCase() ===
+            "ñ"
         ){
 
             openBrowser();
 
             e.preventDefault();
 
-            return;
         }
-
-    }
-);
-
-
-/* =========================================================
-   BROWSER KEYBOARD
-========================================================= */
-
-search.addEventListener(
-    "keydown",
-    e=>{
-
-        if(e.key === "Enter"){
-
-            executeBrowserCommand();
-
-            e.preventDefault();
-
-            return;
-        }
-
-
-        if(e.key === "ArrowDown"){
-
-            selectedCommand++;
-
-            refreshCommands(
-                search.value
-            );
-
-            e.preventDefault();
-
-            return;
-        }
-
-
-        if(e.key === "ArrowUp"){
-
-            selectedCommand =
-                Math.max(
-                    0,
-                    selectedCommand - 1
-                );
-
-            refreshCommands(
-                search.value
-            );
-
-            e.preventDefault();
-
-            return;
-        }
-
-
-        /*
-            IMPORTANT:
-            Escape is deliberately ignored here.
-            The browser cannot be exited with Escape.
-        */
 
     }
 );
@@ -2096,12 +2578,14 @@ search.addEventListener(
 
 search.addEventListener(
     "input",
-    e=>{
+    ()=>{
 
-        selectedCommand = 0;
+        selectedCommand =
+            0;
+
 
         refreshCommands(
-            e.target.value
+            search.value
         );
 
     }
@@ -2109,64 +2593,121 @@ search.addEventListener(
 
 
 /* =========================================================
-   BACKPACK BUTTON
+   BROWSER KEYBOARD CONTROLS
 ========================================================= */
 
-document
-.getElementById("backpackButton")
-.addEventListener(
-    "click",
-    ()=>{
+search.addEventListener(
+    "keydown",
+    e=>{
 
-        if(inventory.style.display === "none"){
+        /*
+            ENTER:
+            execute and close.
+        */
 
-            inventory.style.display =
-                "flex";
+        if(
+            e.key === "Enter"
+        ){
+
+            const value =
+                search.value.trim();
+
+
+            if(
+                value
+            ){
+
+                executeCommand(
+                    value
+                );
+
+            }
+
+
+            browser.style.display =
+                "none";
+
+
+            mode =
+                "chat";
+
+
+            input.focus();
+
+
+            e.preventDefault();
+
+            return;
 
         }
-        else{
 
-            inventory.style.display =
-                "flex";
+
+        /* DOWN */
+
+        if(
+            e.key === "ArrowDown"
+        ){
+
+            selectedCommand++;
+
+
+            refreshCommands(
+                search.value
+            );
+
+
+            e.preventDefault();
 
         }
+
+
+        /* UP */
+
+        if(
+            e.key === "ArrowUp"
+        ){
+
+            selectedCommand =
+                Math.max(
+                    0,
+                    selectedCommand - 1
+                );
+
+
+            refreshCommands(
+                search.value
+            );
+
+
+            e.preventDefault();
+
+        }
+
+
+        /*
+            ESC DOES NOTHING.
+            You must execute a command
+            to leave browser mode.
+        */
 
     }
 );
 
 
 /* =========================================================
-   STARTUP CHAT
+   STARTUP MESSAGE
 ========================================================= */
 
-setTimeout(()=>{
+setTimeout(
+    ()=>{
 
-    addMessage(
-        "Please chat '/?' for a list of commands",
-        true
-    );
+        addMessage(
+            "Please chat '/?' for a list of commands"
+        );
 
-},500);
-
-
-setTimeout(()=>{
-
-    addMessage(
-        `<span class="kohl">[Kohl]</span>: Admin loaded successfully.`,
-        true
-    );
-
-},2200);
-
-
-setTimeout(()=>{
-
-    addMessage(
-        `<span class="kohl">[Kohl]</span>: Type :cmds for a list of commands.`,
-        true
-    );
-
-},3900);
+    },
+    500
+);
 
 
 /* =========================================================
